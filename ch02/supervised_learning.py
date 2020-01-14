@@ -134,6 +134,7 @@ print("Test set R^2: {:.2f}".format(reg.score(X_test, y_test)))
 
 
 # p61
+"""
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.model_selection import train_test_split
 
@@ -149,12 +150,72 @@ for n_neighbors, ax in zip([1, 3, 9], axes):
     # 1, 3, 9近傍点で予測
     reg = KNeighborsRegressor(n_neighbors=n_neighbors)
     reg.fit(X_train, y_train)
-    ax.plit(line, reg.predict(line))
+    ax.plot(line, reg.predict(line))
     ax.plot(X_train, y_train, "^", c=mglearn.cm2(0), markersize=8)
     ax.plot(X_test, y_test, "v", c=mglearn.cm2(1), markersize=8)
 
     ax.set_title(
         "{} neighbor(s)\n train score: {:.2f} test score: {:.2f}".format(
-            n_neighbors, reg.score(X_train, y_train)
-        )
-    )
+            n_neighbors, reg.score(X_train, y_train),
+            reg.score(X_test, y_test)))
+    ax.set_xlabel("Feature")
+    ax.set_ylabel("Target")
+
+axes[0].legend(["Model predictions", "Training data/target",
+                "test data/target"], loc="best")
+plt.show()
+"""
+
+# p63
+#mglearn.plots.plot_linear_regression_wave()
+#plt.show()
+
+
+# 通常最小二乗法
+"""
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+
+#X, y = mglearn.datasets.make_wave(n_samples=60)
+X, y = mglearn.datasets.load_extended_boston()
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
+
+# リッジ回帰
+from sklearn.linear_model import Ridge
+ridge = Ridge().fit(X_train, y_train)
+ridge10 = Ridge(alpha=10).fit(X_train, y_train)
+ridge01 = Ridge(alpha=0.1).fit(X_train, y_train)
+
+lr = LinearRegression().fit(X_train, y_train)
+
+#print("lr.coef_: {}".format(lr.coef_))
+#print("lr.intrecept_: {}".format(lr.intercept_))
+
+#print("Training set score: {:.2f}".format(lr.score(X_train, y_train)))
+#print("Test set score: {:.2f}".format(lr.score(X_test, y_test)))
+
+#print("Training set score: {:.2f}".format(ridge.score(X_train, y_train)))
+#print("Test set score: {:.2f}".format(ridge.score(X_test, y_test)))
+
+#print("Training set score: {:.2f}".format(ridge10.score(X_train, y_train)))
+#print("Test set score: {:.2f}".format(ridge10.score(X_test, y_test)))
+
+#print("Training set score: {:.2f}".format(ridge01.score(X_train, y_train)))
+#print("Test set score: {:.2f}".format(ridge01.score(X_test, y_test)))
+
+plt.plot(ridge.coef_, "s", label="Ridge alpha=1")
+plt.plot(ridge10.coef_, "^", label="Ridge alpha=10")
+plt.plot(ridge01.coef_, "v", label="Ridge akpla=0.1")
+
+plt.plot(lr.coef_, "o", label="LinearRegression")
+plt.xlabel("Coefficient index")
+plt.ylabel("Coefficient magnitude")
+plt.hlines(0, 0, len(lr.coef_))
+plt.ylim(-25, 25)
+plt.legend()
+plt.show()
+
+"""
+
+mglearn.plots.plot_ridge_n_samples()
+plt.show()
